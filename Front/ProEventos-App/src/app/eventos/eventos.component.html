@@ -1,0 +1,9 @@
+<h1>Eventos do Component</h1>
+
+@for (item of eventos; track item.id) {
+  <div>
+    <p><b>Tema:</b> {{ item.tema }}</p>
+    <p><b>Local:</b> {{ item.local }}</p>
+    <hr>
+  </div>
+}
