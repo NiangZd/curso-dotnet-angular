@@ -1,14 +1,12 @@
-import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
   PlatformLocation,
   XhrFactory,
   parseCookieValue
-} from "./chunk-QRBSWDUX.js";
+} from "./chunk-LQLVVJE7.js";
 import {
   APP_BOOTSTRAP_LISTENER,
   ApplicationRef,
   CSP_NONCE,
-  Console,
   DOCUMENT,
   DestroyRef,
   EnvironmentInjector,
@@ -18,43 +16,43 @@ import {
   Injector,
   NgModule,
   NgZone,
+  Observable,
   PendingTasks,
   ResourceImpl,
   RuntimeError,
   Service,
   TracingService,
   TransferState,
+  __objRest,
+  __spreadProps,
+  __spreadValues,
   assertInInjectionContext,
   computed,
+  concatMap,
   encapsulateResourceError,
+  filter,
+  finalize,
   formatRuntimeError,
   inject,
   linkedSignal,
   makeEnvironmentProviders,
   makeStateKey,
+  map,
+  of,
   performanceMarkFeature,
-  require_cjs,
-  require_operators,
   runInInjectionContext,
   setClassMetadata,
   signal,
+  switchMap,
   truncateMiddle,
   ɵɵdefineInjectable,
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵdefineService,
   ɵɵinject
-} from "./chunk-UKZJL6QO.js";
-import {
-  __objRest,
-  __spreadProps,
-  __spreadValues,
-  __toESM
-} from "./chunk-6DU2HRTW.js";
+} from "./chunk-QJ6TYSTL.js";
 
 // node_modules/@angular/common/fesm2022/_module-chunk.mjs
-var import_operators = __toESM(require_operators(), 1);
-var import_rxjs = __toESM(require_cjs(), 1);
 var HttpHeaders = class _HttpHeaders {
   headers;
   normalizedNames = /* @__PURE__ */ new Map();
@@ -810,7 +808,7 @@ var HttpStatusCode;
 var XSSI_PREFIX$1 = /^\)\]\}',?\n/;
 var DEFAULT_SSR_MAX_RESPONSE_BODY_SIZE = 1024 * 1024;
 var HTTP_FETCH_MAX_RESPONSE_SIZE = new InjectionToken(typeof ngDevMode !== "undefined" && ngDevMode ? "HTTP_FETCH_MAX_RESPONSE_SIZE" : "", {
-  factory: () => true ? DEFAULT_SSR_MAX_RESPONSE_BODY_SIZE : null
+  factory: () => false ? DEFAULT_SSR_MAX_RESPONSE_BODY_SIZE : null
 });
 var FetchBackend = class _FetchBackend {
   fetchImpl = inject(FetchFactory, {
@@ -820,7 +818,7 @@ var FetchBackend = class _FetchBackend {
   destroyRef = inject(DestroyRef);
   maxResponseSize = inject(HTTP_FETCH_MAX_RESPONSE_SIZE);
   handle(request) {
-    return new import_rxjs.Observable((observer) => {
+    return new Observable((observer) => {
       const aborter = new AbortController();
       this.doRequest(request, aborter.signal, observer).then(noop, (error) => observer.error(new HttpErrorResponse({
         error
@@ -1102,7 +1100,7 @@ function legacyInterceptorFnFactory() {
     const contributeToStability = inject(REQUESTS_CONTRIBUTE_TO_STABILITY);
     if (contributeToStability) {
       const removeTask = pendingTasks.add();
-      return chain(req, handler).pipe((0, import_operators.finalize)(removeTask));
+      return chain(req, handler).pipe(finalize(removeTask));
     } else {
       return chain(req, handler);
     }
@@ -1147,7 +1145,7 @@ var HttpInterceptorHandler = class _HttpInterceptorHandler {
     this.injector = injector;
     if ((typeof ngDevMode === "undefined" || ngDevMode) && !fetchBackendWarningDisplayed) {
       const isTestingBackend = this.backend.isTestingBackend;
-      if (!(this.backend instanceof FetchBackend) && !isTestingBackend) {
+      if (false) {
         fetchBackendWarningDisplayed = true;
         injector.get(Console).warn(formatRuntimeError(2801, "Angular detected that `HttpClient` is not configured to use `fetch` APIs. It's strongly recommended to enable `fetch` for applications that use Server-Side Rendering for better performance and compatibility. To enable `fetch`, remove the `withXhr()` feature from the `provideHttpClient()` call"));
       }
@@ -1160,7 +1158,7 @@ var HttpInterceptorHandler = class _HttpInterceptorHandler {
     }
     if (this.contributeToStability) {
       const removeTask = this.pendingTasks.add();
-      return this.chain(initialRequest, (downstreamRequest) => this.backend.handle(downstreamRequest)).pipe((0, import_operators.finalize)(removeTask));
+      return this.chain(initialRequest, (downstreamRequest) => this.backend.handle(downstreamRequest)).pipe(finalize(removeTask));
     } else {
       return this.chain(initialRequest, (downstreamRequest) => this.backend.handle(downstreamRequest));
     }
@@ -1266,30 +1264,30 @@ var HttpClient = class _HttpClient {
         timeout: options.timeout
       });
     }
-    const events$ = (0, import_rxjs.of)(req).pipe((0, import_operators.concatMap)((req2) => this.handler.handle(req2)));
+    const events$ = of(req).pipe(concatMap((req2) => this.handler.handle(req2)));
     if (first instanceof HttpRequest || options.observe === "events") {
       return events$;
     }
-    const res$ = events$.pipe((0, import_operators.filter)((event) => event instanceof HttpResponse));
+    const res$ = events$.pipe(filter((event) => event instanceof HttpResponse));
     switch (options.observe || "body") {
       case "body":
         switch (req.responseType) {
           case "arraybuffer":
-            return res$.pipe((0, import_operators.map)((res) => {
+            return res$.pipe(map((res) => {
               if (res.body !== null && !(res.body instanceof ArrayBuffer)) {
                 throw new RuntimeError(2806, ngDevMode && "Response is not an ArrayBuffer.");
               }
               return res.body;
             }));
           case "blob":
-            return res$.pipe((0, import_operators.map)((res) => {
+            return res$.pipe(map((res) => {
               if (res.body !== null && !(res.body instanceof Blob)) {
                 throw new RuntimeError(2807, ngDevMode && "Response is not a Blob.");
               }
               return res.body;
             }));
           case "text":
-            return res$.pipe((0, import_operators.map)((res) => {
+            return res$.pipe(map((res) => {
               if (res.body !== null && typeof res.body !== "string") {
                 throw new RuntimeError(2808, ngDevMode && "Response is not a string.");
               }
@@ -1297,7 +1295,7 @@ var HttpClient = class _HttpClient {
             }));
           case "json":
           default:
-            return res$.pipe((0, import_operators.map)((res) => res.body));
+            return res$.pipe(map((res) => res.body));
         }
       case "response":
         return res$;
@@ -1393,7 +1391,7 @@ var JsonpClientBackend = class _JsonpClientBackend {
     if (!this.isAllowedJsonpUrl(req.urlWithParams)) {
       throw new RuntimeError(2826, ngDevMode && JSONP_ERR_UNSAFE_URL);
     }
-    return new import_rxjs.Observable((observer) => {
+    return new Observable((observer) => {
       const callback = this.nextCallback();
       const url = req.urlWithParams.replace(/=JSONP_CALLBACK(&|$)/, `=${callback}$1`);
       const node = this.document.createElement("script");
@@ -1571,9 +1569,9 @@ var HttpXhrBackend = class _HttpXhrBackend {
     }
     ngDevMode && validateXhrCompatibility(req);
     const xhrFactory = this.xhrFactory;
-    const source = xhrFactory.ɵloadImpl ? (0, import_rxjs.from)(xhrFactory.ɵloadImpl()) : (0, import_rxjs.of)(null);
-    return source.pipe((0, import_operators.switchMap)(() => {
-      return new import_rxjs.Observable((observer) => {
+    const source = false ? from(xhrFactory.ɵloadImpl()) : of(null);
+    return source.pipe(switchMap(() => {
+      return new Observable((observer) => {
         const xhr = xhrFactory.build();
         xhr.open(req.method, req.urlWithParams);
         if (req.withCredentials) {
@@ -1789,7 +1787,7 @@ var HttpXsrfCookieExtractor = class _HttpXsrfCookieExtractor {
   lastToken = null;
   parseCount = 0;
   getToken() {
-    if (true) {
+    if (false) {
       return null;
     }
     const cookieString = this.doc.cookie || "";
@@ -2106,8 +2104,6 @@ var HttpClientJsonpModule = class _HttpClientJsonpModule {
 })();
 
 // node_modules/@angular/common/fesm2022/http.mjs
-var import_rxjs2 = __toESM(require_cjs(), 1);
-var import_operators2 = __toESM(require_operators(), 1);
 var HTTP_TRANSFER_CACHE_ORIGIN_MAP = new InjectionToken(typeof ngDevMode !== "undefined" && ngDevMode ? "HTTP_TRANSFER_CACHE_ORIGIN_MAP" : "");
 var BODY = "b";
 var HEADERS = "h";
@@ -2139,11 +2135,11 @@ function retrieveStateFromCache(req, options, transferState, originMap, storeKey
   if (!skipUseCacheChecks && !canUseOrCacheRequest(req, options)) {
     return null;
   }
-  if (false) {
+  if (originMap) {
     throw new RuntimeError(2803, ngDevMode && "Angular detected that the `HTTP_TRANSFER_CACHE_ORIGIN_MAP` token is configured and present in the client side code. Please ensure that this token is only provided in the server code of the application.");
   }
   if (!storeKey) {
-    const requestUrl = originMap ? mapRequestOriginUrl(req.url, originMap) : req.url;
+    const requestUrl = false ? mapRequestOriginUrl(req.url, originMap) : req.url;
     storeKey = makeCacheKey(req, requestUrl);
   }
   const response = transferState.get(storeKey, null);
@@ -2192,15 +2188,15 @@ function transferCacheInterceptorFn(req, next) {
   const originMap = inject(HTTP_TRANSFER_CACHE_ORIGIN_MAP, {
     optional: true
   });
-  const requestUrl = originMap ? mapRequestOriginUrl(req.url, originMap) : req.url;
+  const requestUrl = false ? mapRequestOriginUrl(req.url, originMap) : req.url;
   const storeKey = makeCacheKey(req, requestUrl);
   const cachedResponse = retrieveStateFromCache(req, options, transferState, null, storeKey, true);
   if (cachedResponse) {
-    return (0, import_rxjs2.of)(cachedResponse);
+    return of(cachedResponse);
   }
   const event$ = next(req);
-  if (true) {
-    return event$.pipe((0, import_operators2.tap)((event) => {
+  if (false) {
+    return event$.pipe(tap((event) => {
       if (event instanceof HttpResponse) {
         const {
           headers,
@@ -2244,9 +2240,6 @@ function hasUncacheableCacheControl(headers) {
     return UNCACHEABLE_CACHE_CONTROL_DIRECTIVES.has(directiveName);
   });
 }
-function hasSetCookieHeader(headers) {
-  return headers.has("set-cookie");
-}
 function isNonCacheableRequest(cache) {
   return cache === "no-cache" || cache === "no-store";
 }
@@ -2256,19 +2249,6 @@ function hasOutgoingCredentials(req) {
     credentials
   } = req;
   return withCredentials || credentials === "include" || credentials === "same-origin";
-}
-function getFilteredHeaders(headers, includeHeaders) {
-  if (!includeHeaders) {
-    return {};
-  }
-  const headersMap = {};
-  for (const key of includeHeaders) {
-    const values = headers.getAll(key);
-    if (values !== null) {
-      headersMap[key] = values;
-    }
-  }
-  return headersMap;
 }
 function sortAndConcatParams(params) {
   const searchParams = new URLSearchParams(params instanceof URLSearchParams ? params : params.toString());
@@ -2291,16 +2271,6 @@ function makeCacheKey(request, mappedRequestUrl) {
   const key = [method, responseType, mappedRequestUrl, serializedBody, encodedParams].join("|");
   const hash = generateHash(key);
   return makeStateKey(hash);
-}
-function toBase64(buffer) {
-  const bytes = new Uint8Array(buffer);
-  const CHUNK_SIZE = 32768;
-  let binaryString = "";
-  for (let i = 0; i < bytes.length; i += CHUNK_SIZE) {
-    const chunk = bytes.subarray(i, i + CHUNK_SIZE);
-    binaryString += String.fromCharCode.apply(null, chunk);
-  }
-  return btoa(binaryString);
 }
 function fromBase64(base64) {
   const binary = atob(base64);
@@ -2354,22 +2324,6 @@ function appendMissingHeadersDetection(url, headers, headersToInclude) {
       };
     }
   });
-}
-function mapRequestOriginUrl(url, originMap) {
-  const origin = new URL(url, "resolve://").origin;
-  const mappedOrigin = originMap[origin];
-  if (!mappedOrigin) {
-    return url;
-  }
-  if (typeof ngDevMode === "undefined" || ngDevMode) {
-    verifyMappedOrigin(mappedOrigin);
-  }
-  return url.replace(origin, mappedOrigin);
-}
-function verifyMappedOrigin(url) {
-  if (new URL(url, "resolve://").pathname !== "/") {
-    throw new RuntimeError(2804, `Angular detected a URL with a path segment in the value provided for the \`HTTP_TRANSFER_CACHE_ORIGIN_MAP\` token: ${url}. The map should only contain origins without any other segments.`);
-  }
 }
 var SHA256_ROUND_CONSTANTS = new Uint32Array([1116352408, 1899447441, 3049323471, 3921009573, 961987163, 1508970993, 2453635748, 2870763221, 3624381080, 310598401, 607225278, 1426881987, 1925078388, 2162078206, 2614888103, 3248222580, 3835390401, 4022224774, 264347078, 604807628, 770255983, 1249150122, 1555081692, 1996064986, 2554220882, 2821834349, 2952996808, 3210313671, 3336571891, 3584528711, 113926993, 338241895, 666307205, 773529912, 1294757372, 1396182291, 1695183700, 1986661051, 2177026350, 2456956037, 2730485921, 2820302411, 3259730800, 3345764771, 3516065817, 3600352804, 4094571909, 275423344, 430227734, 506948616, 659060556, 883997877, 958139571, 1322822218, 1537002063, 1747873779, 1955562222, 2024104815, 2227730452, 2361852424, 2428436474, 2756734187, 3204031479, 3329325298]);
 var textEncoder;
@@ -2665,4 +2619,4 @@ export {
   withHttpTransferCache,
   httpResource
 };
-//# sourceMappingURL=chunk-T3IIFW2G.js.map
+//# sourceMappingURL=chunk-ABXQHRXM.js.map

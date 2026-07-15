@@ -1,9 +1,142 @@
-<h1>Eventos do Component</h1>
+<h1>EVENTOS</h1>
 
-@for (item of eventos; track item.id) {
-  <div>
-    <p><b>Tema:</b> {{ item.tema }}</p>
-    <p><b>Local:</b> {{ item.local }}</p>
-    <hr>
+<hr>
+
+<form class="row g-2 mb-3">
+
+  <div class="col-md-6 col-lg-4">
+
+    <div class="input-group">
+
+      <input
+        type="search"
+        class="form-control"
+        placeholder="Buscar evento..."
+        [formControl]="filtro">
+
+    </div>
+
   </div>
-}
+
+</form>
+
+
+<table class="table table-striped table-hover align-middle">
+
+  <thead class="table-dark">
+
+    <tr>
+      <th>#</th>
+      <th>Imagem</th>
+      <th>Tema</th>
+      <th>Local</th>
+      <th>Data</th>
+      <th>Qtd. Pessoas</th>
+      <th>Lote</th>
+      <th>Opções</th>
+    </tr>
+
+  </thead>
+
+
+  <tbody>
+
+    @if (eventosFiltrados.length > 0) {
+
+
+      @for (item of eventosFiltrados; track item.eventoId) {
+
+
+        <tr>
+
+          <td>
+            {{ item.eventoId }}
+          </td>
+
+
+          <td>
+
+            <img
+              [src]="item.imgURL"
+              class="img-evento"
+              alt="Imagem do evento">
+
+          </td>
+
+
+          <td>
+            {{ item.tema }}
+          </td>
+
+
+          <td>
+            {{ item.local }}
+          </td>
+
+
+          <td>
+            {{ item.dataEvento }}
+          </td>
+
+
+          <td>
+            {{ item.qtdPessoas }}
+          </td>
+
+
+          <td>
+            {{ item.lote }}
+          </td>
+
+
+          <td>
+
+            <button
+              class="btn btn-sm btn-outline-primary me-2"
+              type="button">
+
+              <i class="fas fa-edit"></i>
+
+            </button>
+
+
+            <button
+              class="btn btn-sm btn-outline-danger"
+              type="button">
+
+              <i class="fas fa-trash"></i>
+
+            </button>
+
+          </td>
+
+
+        </tr>
+
+      }
+
+
+    } @else {
+
+
+      <tr>
+
+        <td
+          colspan="8"
+          class="text-center py-4">
+
+          <h4>
+            Nenhum evento encontrado!
+          </h4>
+
+        </td>
+
+      </tr>
+
+
+    }
+
+
+  </tbody>
+
+</table>

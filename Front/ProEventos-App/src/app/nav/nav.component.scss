@@ -1,0 +1,19 @@
+@media (max-width: 991.98px) {
+
+  .navbar-collapse {
+    display: block !important;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+
+    transition:
+      max-height .35s ease,
+      opacity .35s ease;
+
+    &.show {
+      max-height: 500px;
+      opacity: 1;
+    }
+  }
+
+}
