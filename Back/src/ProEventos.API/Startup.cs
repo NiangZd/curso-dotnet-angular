@@ -1,6 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using ProEventos.API.Data;
+using ProEventos.Application.Interfaces;
+using ProEventos.Application.Services;
+using ProEventos.Persistence;
+using ProEventos.Persistence.Interfaces;
+using ProEventos.Persistence.Repository;
 
 namespace ProEventos.API;
 
@@ -16,10 +20,17 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddDbContext<DataContext>(
+        services.AddDbContext<ProEventosContext>(
             context => context.UseSqlite(Configuration.GetConnectionString("Default"))
         );
-        services.AddControllers();
+        services.AddControllers()
+                .AddNewtonsoftJson(
+                    x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                );
+
+        services.AddScoped<IEventoService, EventoService>();
+        services.AddScoped<IGeralPersistence, GeralPersistence>();
+        services.AddScoped<IEventoPersistence, EventoPersistence>();
         services.AddCors();
         services.AddSwaggerGen(c =>
         {
